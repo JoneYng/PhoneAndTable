@@ -5,7 +5,7 @@ plugins {
 
 android {
     namespace = "com.zx.fitter"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.zx.fitter"
