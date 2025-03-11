@@ -63,7 +63,7 @@ class ListDetailActivity : ComponentActivity() {
                 Scaffold(
                     modifier = Modifier.fillMaxSize()
                 ) {
-                    SampleListDetailPaneScaffoldFull()
+                    MessageScreen()
                 }
             }
         }
@@ -73,50 +73,72 @@ class ListDetailActivity : ComponentActivity() {
 @OptIn(ExperimentalMaterial3AdaptiveApi::class)
 @Preview
 @Composable
-fun SampleListDetailPaneScaffoldFull() {
+fun MessageScreen() {
+    // 创建一个 ListDetailPaneScaffold 导航器，专为支持消息列表和详情页的导航
     val navigator = rememberListDetailPaneScaffoldNavigator<Message>()
+
+    // 获取当前上下文并尝试将其转换为 Activity，便于在非导航场景下调用 `finish()`
     val context = LocalContext.current
     val activity = context as? Activity
-    //支持使用系统返回手势或按钮返回
+
+    // 使用 BackHandler 实现返回逻辑
+    // 如果 `navigator` 表示可以返回（即当前处于详情页），则执行返回操作
     BackHandler(navigator.canNavigateBack()) {
         navigator.navigateBack()
     }
+    // 使用 Column 构建页面的整体布局
     Column {
+        // 标题栏部分
         Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(60.dp)
-                .background(White),
-            verticalAlignment = Alignment.CenterVertically
+                .background(White), // 背景颜色为白色
+            verticalAlignment = Alignment.CenterVertically // 垂直居中
         ) {
-            Image(painter = painterResource(id = R.mipmap.ic_calendar_left_arrow),
+            // 返回按钮（左侧箭头）
+            Image(
+                painter = painterResource(id = R.mipmap.ic_calendar_left_arrow),
                 contentDescription = null,
                 modifier = Modifier
-                    .size(width = 30.dp, height = 30.dp)
+                    .size(width = 30.dp, height = 30.dp) // 图片尺寸
                     .clickable {
                         if (navigator.canNavigateBack()) {
+                            // 如果处于详情页，返回至消息列表
                             navigator.navigateBack()
                         } else {
+                            // 如果已在消息列表页，直接退出 Activity
                             activity?.finish()
                         }
-                    })
-            Text(text = if (navigator.canNavigateBack()) "详情" else "消息列表", fontSize = 20.sp)
+                    }
+            )
+
+            // 动态文本，显示 "详情" 或 "消息列表"
+            Text(
+                text = if (navigator.canNavigateBack()) "详情" else "消息列表",
+                fontSize = 20.sp
+            )
         }
+
+        // 核心布局：ListDetailPaneScaffold
         ListDetailPaneScaffold(
-            directive = navigator.scaffoldDirective,
-            value = navigator.scaffoldValue,
+            directive = navigator.scaffoldDirective, // 控制面板切换的指令
+            value = navigator.scaffoldValue,         // 当前导航的状态
+            // 消息列表面板（左侧/主界面）
             listPane = {
                 AnimatedPane {
                     MessageList(
+                        // 点击列表项时，切换到详情页
                         onItemClick = { item ->
                             navigator.navigateTo(ListDetailPaneScaffoldRole.Detail, item)
                         },
                     )
                 }
             },
+            // 详情面板（右侧/详情界面）
             detailPane = {
                 AnimatedPane {
-                    // Show the detail pane content if selected item is available
+                    // 如果 `navigator` 当前选中了某个消息，则显示其详情
                     navigator.currentDestination?.content?.let {
                         messageDetails(it)
                     }

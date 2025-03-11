@@ -85,9 +85,16 @@ class ComposeCalendarActivity : ComponentActivity() {
             }
             val windowSizeClass = calculateWindowSizeClass(this@ComposeCalendarActivity)
             when (windowSizeClass.widthSizeClass) {
-                WindowWidthSizeClass.Compact -> LiveCalendarPhonePage()
-                WindowWidthSizeClass.Medium, WindowWidthSizeClass.Expanded -> LiveCalendarPadPage()
+                WindowWidthSizeClass.Compact -> {
+                    //手机日历课程列表
+                    LiveCalendarPhonePage()
+                }
+                WindowWidthSizeClass.Medium, WindowWidthSizeClass.Expanded -> {
+                    //平板日历课程列表
+                    LiveCalendarPadPage()
+                }
                 else -> {
+                    //平板日历课程列表
                     LiveCalendarPadPage()
                 }
             }

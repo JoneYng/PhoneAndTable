@@ -56,31 +56,22 @@ class BoxWithConstraintsActivity : ComponentActivity() {
                 Scaffold(
                     modifier = Modifier.fillMaxSize()
                 ) {
-                    Card()
-                }
-            }
-        }
-    }
-
-
-    @Preview
-    @Composable
-    fun Card() {
-        BoxWithConstraints {
-            BoxWithConstraints(
-                modifier = Modifier.fillMaxSize(),
-                contentAlignment = Alignment.Center
-            ) {
-                Column {
-                    Text("宽度：${this@BoxWithConstraints.maxWidth}.")
-                    Text("高度：${this@BoxWithConstraints.maxHeight}")
-                    Spacer(Modifier.size(30.dp))
-                    if (this@BoxWithConstraints.maxWidth < 600.dp) {
-                        // 小屏幕（比如手机）
-                        Text("这是一个小屏幕", fontSize = 16.sp)
-                    } else {
-                        // 大屏幕（比如平板）
-                        Text("这是一个大屏幕", fontSize = 24.sp)
+                    BoxWithConstraints(
+                        modifier = Modifier.fillMaxSize(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Column {
+                            Text("当前布局的最大宽度：${this@BoxWithConstraints.maxWidth}")
+                            Text("当前布局的最大高度：${this@BoxWithConstraints.maxHeight}")
+                            Spacer(Modifier.size(30.dp))
+                            if (this@BoxWithConstraints.maxWidth < 600.dp) {
+                                // 小屏幕（比如手机）
+                                Text("这是一个小屏幕", fontSize = 16.sp)
+                            } else {
+                                // 大屏幕（比如平板）
+                                Text("这是一个大屏幕", fontSize = 24.sp)
+                            }
+                        }
                     }
                 }
             }

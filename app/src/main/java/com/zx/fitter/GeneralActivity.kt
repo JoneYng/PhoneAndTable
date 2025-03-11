@@ -13,10 +13,10 @@ class GeneralActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_default_calendar)
-        val main: ConstraintLayout = findViewById(R.id.main)
+        val root: ConstraintLayout = findViewById(R.id.main)
         tvMessage = findViewById(R.id.tv_general)
         //监听窗口大小变化
-        main.viewTreeObserver.addOnGlobalLayoutListener{
+        root.viewTreeObserver.addOnGlobalLayoutListener{
             computeWindowSizeClasses()
         }
         computeWindowSizeClasses()

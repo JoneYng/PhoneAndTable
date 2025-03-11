@@ -53,24 +53,23 @@ import com.zx.fitter.ui.theme.PhoneAndTableTheme
  */
 class PaneScaffoldActivity : ComponentActivity() {
     data class VideoItem(val title: String, val url: String)
+
     val videoList = listOf(
         VideoItem(
-            "视频 1",
-            "https://www.w3schools.com/html/mov_bbb.mp4"
+            "视频 1", "https://www.w3schools.com/html/mov_bbb.mp4"
         ),
         VideoItem(
-            "视频 2",
-            "https://www.w3schools.com/html/movie.mp4"
+            "视频 2", "https://www.w3schools.com/html/movie.mp4"
         ),
     )
+
     @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             PhoneAndTableTheme {
                 Scaffold(
-                    modifier = Modifier
-                        .fillMaxSize()
+                    modifier = Modifier.fillMaxSize()
                 ) {
                     SampleSupportingPaneScaffoldSimplified()
                 }
@@ -82,26 +81,36 @@ class PaneScaffoldActivity : ComponentActivity() {
     @OptIn(ExperimentalMaterial3AdaptiveApi::class)
     @Composable
     fun SampleSupportingPaneScaffoldSimplified() {
+        // 当前播放的视频链接，初始化为视频列表中的第一个视频
         var currentVideoUrl by remember { mutableStateOf(videoList.first().url) }
+        // 创建 SupportingPaneScaffold 导航器以处理导航逻辑
         val navigator = rememberSupportingPaneScaffoldNavigator()
+        // 当可以返回时拦截返回事件，并执行导航返回操作
         BackHandler(navigator.canNavigateBack()) {
             navigator.navigateBack()
         }
+        // SupportingPaneScaffold 组件用于实现三栏布局
         SupportingPaneScaffold(
-            directive = navigator.scaffoldDirective,
-            value = navigator.scaffoldValue,
+            directive = navigator.scaffoldDirective, // 指定布局指令（控制各个 Pane 的展示情况）
+            value = navigator.scaffoldValue,         // 控制当前的布局状态
+
+            //主视频播放区域
             mainPane = {
-                MainPane(
-                    videoUrl = currentVideoUrl,
-                    shouldShowSupportingPaneButton = navigator.scaffoldValue.secondary == PaneAdaptedValue.Hidden,
-                    onNavigateToSupportingPane = { navigator.navigateTo(ThreePaneScaffoldRole.Secondary) }
+                // 当前播放的视频 URL
+                MainPane(videoUrl = currentVideoUrl,
+                    // 视频列表隐藏时显示按钮
+                    isShowButton = navigator.scaffoldValue.secondary == PaneAdaptedValue.Hidden,
+                    // 点击按钮时导航到视频列表
+                    onNavigateToVideoList = { navigator.navigateTo(ThreePaneScaffoldRole.Secondary) }
                 )
             },
+            // 视频列表
             supportingPane = {
-                SupportingPane(onVideoSelected = { selectedUrl ->
-                    currentVideoUrl = selectedUrl
+                VideoListView(onVideoSelected = { selectedUrl ->
+                    currentVideoUrl = selectedUrl // 切换当前播放的视频 URL
                 })
             },
+            //额外的附加区域
             extraPane = { ExtraPane() },
         )
     }
@@ -109,9 +118,8 @@ class PaneScaffoldActivity : ComponentActivity() {
 
     @OptIn(ExperimentalMaterial3AdaptiveApi::class)
     @Composable
-    fun ThreePaneScaffoldScope.SupportingPane(
-        modifier: Modifier = Modifier,
-        onVideoSelected: (String) -> Unit
+    fun ThreePaneScaffoldScope.VideoListView(
+        modifier: Modifier = Modifier, onVideoSelected: (String) -> Unit
     ) {
         AnimatedPane(modifier = modifier.safeContentPadding()) {
             Box(
@@ -158,8 +166,8 @@ class PaneScaffoldActivity : ComponentActivity() {
 @Composable
 fun ThreePaneScaffoldScope.MainPane(
     videoUrl: String,
-    shouldShowSupportingPaneButton: Boolean,
-    onNavigateToSupportingPane: () -> Unit,
+    isShowButton: Boolean,
+    onNavigateToVideoList: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     AnimatedPane(modifier = modifier.safeContentPadding()) {
@@ -171,12 +179,14 @@ fun ThreePaneScaffoldScope.MainPane(
             contentAlignment = Alignment.Center
         ) {
             Text(color = Color.White, text = "$videoUrl")
-            if (shouldShowSupportingPaneButton) {
+            if (isShowButton) {
                 Button(
-                    modifier = Modifier.wrapContentSize().align(Alignment.BottomEnd),
-                    onClick = onNavigateToSupportingPane
+                    modifier = Modifier
+                        .wrapContentSize()
+                        .align(Alignment.BottomEnd),
+                    onClick = onNavigateToVideoList
                 ) {
-                    Text("显示目录")
+                    Text("目录")
                 }
             }
         }
@@ -197,7 +207,7 @@ fun ThreePaneScaffoldScope.ExtraPane(
                 .background(Color.LightGray),
             contentAlignment = Alignment.Center
         ) {
-            Text("extraPane")
+            Text("扩展页面")
         }
     }
 }
