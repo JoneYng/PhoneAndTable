@@ -218,7 +218,7 @@ fun PhoneCalendarView(
             }
         }
         HorizontalPager(
-            modifier = Modifier.fillMaxWidth(), state = pagerState, beyondBoundsPageCount = 0
+            modifier = Modifier.fillMaxWidth(), state = pagerState
         ) { page ->
             val gridState = gridStates[page]
             LazyVerticalGrid(
@@ -375,7 +375,7 @@ fun HdCalendarView(
                 }
             }
             HorizontalPager(
-                modifier = Modifier.fillMaxWidth(), state = pagerState, beyondBoundsPageCount = 0
+                modifier = Modifier.fillMaxWidth(), state = pagerState
             ) { page ->
                 val gridState = gridStates[page]
                 LazyVerticalGrid(

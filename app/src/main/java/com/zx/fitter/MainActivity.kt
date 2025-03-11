@@ -7,66 +7,72 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.zx.fitter.ui.theme.PhoneAndTableTheme
 
 class MainActivity : ComponentActivity() {
+    val exampleList = listOf(
+        "普通 Activity" to GeneralActivity::class.java,
+        "Compose Activity" to ComposeCalendarActivity::class.java,
+        "列表详情（消息中心）" to ListDetailActivity::class.java,
+        "视频播放 PaneScaffold" to PaneScaffoldActivity::class.java,
+        "自适应布局 BoxWithConstraints" to BoxWithConstraintsActivity::class.java
+    )
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        setContent {
+        setContent{
             PhoneAndTableTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Calendar", modifier = Modifier.padding(innerPadding)
-                    )
+                    SimpleListView()
                 }
             }
         }
     }
-
     @Composable
-    fun Greeting(name: String, modifier: Modifier = Modifier) {
+    fun SimpleListView() {
         Column(
             modifier = Modifier
-                .fillMaxWidth()
-                .fillMaxHeight(),
-            verticalArrangement = Arrangement.Center,
+                .fillMaxSize()
+                .padding(16.dp),
+            verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(
-                text = "Hello $name!", modifier = modifier
-            )
-            ElevatedButton(onClick = {
-                val intent = Intent(this@MainActivity, DefaultCalendarActivity::class.java)
-                startActivity(intent)
-            }) {
-                Text("点击跳转到普通Activity")
-            }
-            ElevatedButton(onClick = {
-                val intent = Intent(this@MainActivity, ComposeCalendarActivity::class.java)
-                startActivity(intent)
-            }) {
-                Text("点击跳转到ComposeActivity")
+            Text(text = "Hello!", fontSize = 24.sp, fontWeight = FontWeight.Bold)
+            LazyColumn(
+                verticalArrangement = Arrangement.spacedBy(8.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                items(exampleList.size) { index->
+                    ElevatedButton(modifier = Modifier.fillMaxWidth(), onClick = {
+                        val intent = Intent(this@MainActivity, exampleList[index].second)
+                        startActivity(intent)
+                    }) {
+                        Text(exampleList[index].first)
+                    }
+                }
             }
         }
     }
-
     @Preview(showBackground = true)
     @Composable
     fun GreetingPreview() {
         PhoneAndTableTheme {
-            Greeting("Calendar")
+            SimpleListView()
         }
     }
 }

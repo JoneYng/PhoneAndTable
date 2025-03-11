@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
+    id("kotlin-parcelize")
 }
 
 android {
@@ -37,6 +38,7 @@ android {
         jvmTarget = "1.8"
     }
     buildFeatures {
+        dataBinding=true
         compose = true
     }
     composeOptions {
@@ -50,7 +52,7 @@ android {
 }
 
 dependencies {
-
+    // Compose 相关依赖
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
@@ -64,7 +66,13 @@ dependencies {
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
     implementation(libs.windowSize)
-
+    implementation(libs.androidx.foundation)
+    implementation(libs.androidx.ui.text)
+    //列表详情布局
+    implementation(libs.androidx.adaptive.navigation.android)
+    implementation(libs.androidx.room.ktx)
+    implementation(libs.androidx.foundation.android)
+    implementation(libs.commons.base)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
