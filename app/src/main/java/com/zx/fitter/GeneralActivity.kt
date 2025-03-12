@@ -10,16 +10,26 @@ import androidx.window.layout.WindowMetricsCalculator
 class GeneralActivity : ComponentActivity() {
     lateinit var  tvMessage: TextView
 
+//    override fun onMultiWindowModeChanged(isInMultiWindowMode: Boolean) {
+//        super.onMultiWindowModeChanged(isInMultiWindowMode)
+//        if (isInMultiWindowMode) {
+//            // 进入分屏模式，切换到简化布局
+//            setContentView(R.layout.activity_compact)
+//        } else {
+//            // 退出分屏，恢复完整布局
+//            setContentView(R.layout.activity_normal)
+//        }
+//    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_default_calendar)
         val root: ConstraintLayout = findViewById(R.id.main)
-        tvMessage = findViewById(R.id.tv_general)
-        //监听窗口大小变化
-        root.viewTreeObserver.addOnGlobalLayoutListener{
-            computeWindowSizeClasses()
-        }
-        computeWindowSizeClasses()
+//        tvMessage = findViewById(R.id.tv_general)
+//        //监听窗口大小变化
+//        root.viewTreeObserver.addOnGlobalLayoutListener{
+//            computeWindowSizeClasses()
+//        }
+//        computeWindowSizeClasses()
     }
 
     // 非 Compose 应用中的使用方法

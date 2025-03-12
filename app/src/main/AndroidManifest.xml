@@ -24,7 +24,9 @@
         <!-- android:theme="@style/Theme.Material3.DayNight.NoActionBar" -->
         <activity
             android:name=".GeneralActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:resizeableActivity="true"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout"/>
         <activity
             android:name=".ComposeCalendarActivity"
             android:exported="false" />
